@@ -112,3 +112,24 @@ aaa.get("/city",{
 ```
 
 - ### 拦截器
+在请求前或者响应前进行拦截
+```js
+  // 请求前添加token到请求头
+  let instance = axios.create(); // 创建一个实例,不要污染全局
+  instance.interceptors.request.use(config=>{
+    config.headers.token='xxx';
+    return config;
+  })
+  
+  // 请求过程添加loading动画
+  let instance = axios.create(); // 创建一个实例,不要污染全局
+  instance.interceptors.request.use(config=>{
+    $("#modal").show();
+    return config;
+  })
+  instance.interceptors.respond.use(res=>{
+    $("#modal").hide();
+    return res;
+  })
+  
+```
