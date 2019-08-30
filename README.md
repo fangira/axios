@@ -133,3 +133,46 @@ aaa.get("/city",{
   })
   
 ```
+
+- ### 处理错误
+```js
+  let instance = axios.create();
+  instance.interceptors.request.use(config=>{
+    return config;
+  },err=>{
+    // 请求错误一般是 401超时，404 Not Find
+    // 错误提示
+    $("#tips").show();
+    setTimeout(()=>{
+      $("#tips").hide();
+    },2000);
+    return Promise.reject(err);
+  })
+  instance.interceptors.respond.use(res=>{
+    return res;
+  },err=>{
+    // 响应错误一般是 500系统错误，502系统重启
+    // 错误提示
+    $("#tips").show();
+    setTimeout(()=>{
+      $("#tips").hide();
+    },2000);
+    return Promise.reject(err);
+  })
+```
+
+- ### 取消请求
+```js
+let source = axios.CancelToken.source(); // 实例化source对象
+axios.get("/city",{
+  cancelToken:source.token  // 把source.token放进请求设置的参数中
+}).then(res=>{
+  console.log(res);
+}).catch(err=>{
+  console.log(err);
+})
+
+// 取消请求(errMsg)
+source.cancel("这里的字符串会进入err里面");
+
+```
